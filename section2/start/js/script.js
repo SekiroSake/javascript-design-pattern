@@ -1,3 +1,5 @@
+//singleton
+
 (function(win, $) {
     var CirclegeneratorSingleton = (function() {
         var instance;
