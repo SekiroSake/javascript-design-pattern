@@ -1,4 +1,10 @@
 (function(win, $) {
+    function clone(src, out) {
+        for (var attr in src.prototype) {
+            out.prototype[attr] = src.prototype[attr];
+        }
+    }
+
     function Circle() {
         this.item = $('<div class="circle"></div>');
     }
@@ -15,6 +21,10 @@
         return this.item;
     }
 
+    function Rect() {
+        this.item = $('<div class="rect"></div>');
+    }
+    clone(Circle, Rect);
 
 
     function RedCircleBuilder() {
@@ -32,11 +42,18 @@
 
     function BlueCircleBuilder() {
         this.item = new Circle();
+
         this.init();
     }
 
     BlueCircleBuilder.prototype.init = function() {
         this.item.color("blue");
+
+        var rect = new Rect();
+        rect.color("yellow");
+        rect.move(40, 40);
+
+        this.item.get().append(rect.get());
     };
     BlueCircleBuilder.prototype.get = function() {
         return this.item;
@@ -66,18 +83,17 @@
             _cf.register('blue', BlueCircleBuilder);
 
             function _position(circle, left, top) {
-                circle.css('left', left);
-                circle.css('top', top);
+                circle.move(left, top);
             }
 
             function create(left, top, type) {
-                var circle = _cf.create(type).get();
-                _position(circle, left, top);
+                var circle = _cf.create(type);
+                circle.move(left, top);
                 return circle;
             }
 
             function add(circle) {
-                _stage.append(circle);
+                _stage.append(circle.get());
                 _aCircle.push(circle);
             }
 

@@ -1,21 +1,38 @@
-//factory
+//abstractFactory
+//Interface of js
 
 (function(win, $) {
-    var RedCircle = function() {
-            this.item = $('<div class="circle"></div>');
-        },
-        BlueCircle = function() {
-            this.item = $('<div class="circle" style="background:blue"></div>');
-        },
-        CircleFactory = function() {
-            this.create = function(color) {
-                if (color === 'blue') {
-                    return new BlueCircle();
-                } else {
-                    return new RedCircle();
-                }
+    function RedCircle() {
+
+    }
+    RedCircle.prototype.create = function() {
+        this.item = $('<div class="circle"></div>');
+    };
+
+    function BlueCircle() {
+
+    }
+    BlueCircle.prototype.create = function() {
+        this.item = $('<div class="circle" style="background:blue"></div>');
+    };
+
+
+    CircleFactory = function() {
+        this.type = {};
+        this.create = function(color) {
+            if (color === 'blue') {
+                return new BlueCircle();
+            } else {
+                return new RedCircle();
+            }
+        };
+
+        this.register = function(type, cls) {
+            if (cls.prototype.create) {
+                this.types[type] = cls;
             }
         }
+    };
 
 
     var CirclegeneratorSingleton = (function() {
